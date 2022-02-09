@@ -1,0 +1,37 @@
+server:
+  port: 8011
+ 
+spring:
+  application:
+   name: service1
+ 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true # 유레카 서비스에 (자신을) 등록 여부
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+ 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      failureRateThreshold: 50
+      slowCallRateThreshold: 100
+      slowCallDurationThreshold: 60000
+      permittedNumberOfCallsInHalfOpenState: 4
+      maxWaitDurationInHalfOpenState: 1000
+      slidingWindowType: COUNT_BASED
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 10
+      waitDurationInOpenState: 10000
+  instances:
+    hello:
+      baseConfig: default
